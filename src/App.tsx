@@ -1,43 +1,48 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { Login, Dashboard } from './pages'
-import { useAuth } from './hooks/useAuth'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { Login, Signup, Dashboard, Tickets, TicketDetail } from "./pages";
+import { useAuth } from "./hooks/useAuth";
 
 // Protected Route component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth()
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
-    )
+    );
   }
 
   if (!user) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/" replace />;
   }
 
-  return <>{children}</>
+  return <>{children}</>;
 }
 
 // Public Route component (redirect to dashboard if already logged in)
 function PublicRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth()
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
-    )
+    );
   }
 
   if (user) {
-    return <Navigate to="/dashboard" replace />
+    return <Navigate to="/dashboard" replace />;
   }
 
-  return <>{children}</>
+  return <>{children}</>;
 }
 
 function App() {
@@ -53,6 +58,14 @@ function App() {
           }
         />
         <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <Signup />
+            </PublicRoute>
+          }
+        />
+        <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
@@ -60,9 +73,25 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/tickets"
+          element={
+            <ProtectedRoute>
+              <Tickets />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tickets/:id"
+          element={
+            <ProtectedRoute>
+              <TicketDetail />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
