@@ -4,3 +4,5 @@ export { Signup } from "./Signup";
 export { Dashboard } from "./Dashboard";
 export { Tickets } from "./Tickets";
 export { TicketDetail } from "./TicketDetail";
+export { KnowledgeBase } from "./KnowledgeBase";
+export { PublicKB } from "./PublicKB";

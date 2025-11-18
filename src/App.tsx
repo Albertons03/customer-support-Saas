@@ -4,7 +4,15 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { Login, Signup, Dashboard, Tickets, TicketDetail } from "./pages";
+import {
+  Login,
+  Signup,
+  Dashboard,
+  Tickets,
+  TicketDetail,
+  KnowledgeBase,
+  PublicKB,
+} from "./pages";
 import { useAuth } from "./hooks/useAuth";
 
 // Protected Route component
@@ -89,6 +97,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/knowledge-base/*"
+          element={
+            <ProtectedRoute>
+              <KnowledgeBase />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/kb" element={<PublicKB />} />
+        <Route path="/kb/:id" element={<PublicKB />} />
       </Routes>
     </Router>
   );

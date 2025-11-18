@@ -152,6 +152,44 @@ export interface Database {
           created_at?: string;
         };
       };
+      knowledge_base_articles: {
+        Row: {
+          id: string;
+          workspace_id: string;
+          title: string;
+          content: string;
+          category: string;
+          published: boolean;
+          views: number;
+          created_at: string;
+          updated_at: string;
+          created_by: string | null;
+        };
+        Insert: {
+          id?: string;
+          workspace_id: string;
+          title: string;
+          content: string;
+          category: string;
+          published?: boolean;
+          views?: number;
+          created_at?: string;
+          updated_at?: string;
+          created_by?: string | null;
+        };
+        Update: {
+          id?: string;
+          workspace_id?: string;
+          title?: string;
+          content?: string;
+          category?: string;
+          published?: boolean;
+          views?: number;
+          created_at?: string;
+          updated_at?: string;
+          created_by?: string | null;
+        };
+      };
     };
   };
 }
