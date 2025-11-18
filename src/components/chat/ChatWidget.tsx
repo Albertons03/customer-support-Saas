@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { X, Minimize2, Send, MessageCircle, AlertCircle } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
-import { streamChatMessage } from "../../lib/openai";
+import { callAIChat } from "../../lib/aiEdgeFunction";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -242,8 +242,7 @@ export function ChatWidget({
         { role: "user" as const, content: userMessageContent },
       ];
 
-      // Stream AI response
-      let aiResponseContent = "";
+      // Call AI Edge Function
       const aiMessageId = `temp-ai-${Date.now()}`;
       const aiMessage: Message = {
         id: aiMessageId,
@@ -254,23 +253,29 @@ export function ChatWidget({
 
       setMessages((prev) => [...prev, aiMessage]);
 
-      // Stream the response
-      for await (const chunk of streamChatMessage({ messages: chatMessages })) {
-        aiResponseContent += chunk;
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === aiMessageId ? { ...m, content: aiResponseContent } : m
-          )
-        );
-      }
+      // Call the Edge Function
+      const response = await callAIChat({
+        messages: chatMessages,
+        conversationId: conversationId || undefined,
+        workspaceId: "00000000-0000-0000-0000-000000000001",
+      });
 
-      // Save AI response to DB
-      const savedAiId = await saveMessage("assistant", aiResponseContent);
-      if (savedAiId) {
-        setMessages((prev) =>
-          prev.map((m) => (m.id === aiMessageId ? { ...m, id: savedAiId } : m))
-        );
-      }
+      const aiResponseContent = response.message;
+
+      // Update message with response
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === aiMessageId ? { ...m, content: aiResponseContent } : m
+        )
+      );
+
+      // Note: Edge Function already saves the message to DB
+      // Just update the temp ID if needed
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === aiMessageId ? { ...m, id: `ai-${Date.now()}` } : m
+        )
+      );
 
       // Check if AI suggests creating a ticket
       if (
