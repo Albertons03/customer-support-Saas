@@ -12,6 +12,8 @@ import {
   TicketDetail,
   KnowledgeBase,
   PublicKB,
+  Settings,
+  Chat,
 } from "./pages";
 import { useAuth } from "./hooks/useAuth";
 
@@ -102,6 +104,22 @@ function App() {
           element={
             <ProtectedRoute>
               <KnowledgeBase />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
             </ProtectedRoute>
           }
         />

@@ -6,3 +6,5 @@ export { Tickets } from "./Tickets";
 export { TicketDetail } from "./TicketDetail";
 export { KnowledgeBase } from "./KnowledgeBase";
 export { PublicKB } from "./PublicKB";
+export { Settings } from "./Settings";
+export { Chat } from "./Chat";

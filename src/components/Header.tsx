@@ -10,6 +10,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
+import { useTheme } from "../hooks/useTheme";
 import { useNavigate } from "react-router-dom";
 
 interface HeaderProps {
@@ -18,7 +19,6 @@ interface HeaderProps {
 }
 
 export function Header({ pageTitle, onMenuClick }: HeaderProps) {
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,6 +27,7 @@ export function Header({ pageTitle, onMenuClick }: HeaderProps) {
   const userMenuRef = useRef<HTMLDivElement>(null);
 
   const { user, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   // Mock notifications
@@ -82,14 +83,8 @@ export function Header({ pageTitle, onMenuClick }: HeaderProps) {
     navigate("/");
   };
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    // Here you would implement actual dark mode logic
-    // For now, just toggling state
-  };
-
   return (
-    <header className="h-16 bg-gradient-to-r from-white via-purple-50/30 to-indigo-50/30 border-b border-gray-200 sticky top-0 z-[40] shadow-sm">
+    <header className="h-16 bg-gradient-to-r from-white via-purple-50/30 to-indigo-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-[40] shadow-sm">
       <div className="h-full px-4 flex items-center justify-between">
         {/* Left Section */}
         <div className="flex items-center gap-4 flex-1">
@@ -132,12 +127,12 @@ export function Header({ pageTitle, onMenuClick }: HeaderProps) {
 
           {/* Dark Mode Toggle */}
           <button
-            onClick={toggleDarkMode}
-            className="p-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 transition-all duration-200"
-            title={isDarkMode ? "Light Mode" : "Dark Mode"}
+            onClick={toggleTheme}
+            className="p-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:from-gray-700 dark:hover:to-gray-600 transition-all duration-200"
+            title={theme === "dark" ? "Light Mode" : "Dark Mode"}
           >
-            {isDarkMode ? (
-              <Sun className="w-5 h-5 text-amber-600" />
+            {theme === "dark" ? (
+              <Sun className="w-5 h-5 text-amber-500" />
             ) : (
               <Moon className="w-5 h-5 text-indigo-600" />
             )}

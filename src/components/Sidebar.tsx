@@ -57,7 +57,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-0 left-0 z-[50] h-full bg-white border-r border-gray-200 shadow-2xl
+          fixed top-0 left-0 z-[50] h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-2xl
           transition-all duration-300 ease-in-out
           ${isCollapsed ? "w-20" : "w-64"}
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
@@ -66,13 +66,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         `}
       >
         {/* Logo Section */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200 bg-white">
+        <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
           <div className="flex items-center">
             <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-2 rounded-xl shadow-lg">
               <MessageSquare className="w-6 h-6 text-white" />
             </div>
             {!isCollapsed && (
-              <span className="ml-3 text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="ml-3 text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent dark:from-indigo-400 dark:to-purple-400">
                 SupportHub
               </span>
             )}
@@ -81,7 +81,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           {/* Collapse Button (Desktop only) */}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden lg:block p-1.5 rounded-lg hover:bg-gray-100 transition"
+            className="hidden lg:block p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
           >
             {isCollapsed ? (
               <ChevronRight className="w-5 h-5 text-gray-600" />
@@ -108,7 +108,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                       ${
                         active
                           ? "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white shadow-lg shadow-indigo-500/50 scale-105"
-                          : "text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover:scale-105"
+                          : "text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:from-gray-700 dark:hover:to-gray-600 hover:scale-105"
                       }
                       ${isCollapsed ? "justify-center" : ""}
                     `}
@@ -145,7 +145,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         </nav>
 
         {/* User Profile Section */}
-        <div className="border-t border-gray-200 p-4 bg-white">
+        <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-800">
           <div
             className={`
               flex items-center
@@ -158,10 +158,10 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   <User className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-3 flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                     {user?.email?.split("@")[0] || "User"}
                   </p>
-                  <p className="text-xs text-gray-500 truncate">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                     {user?.email}
                   </p>
                 </div>
