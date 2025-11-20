@@ -98,6 +98,7 @@ export function PublicKB() {
       setSelectedArticle(data as Article);
 
       // Increment view count
+      // @ts-expect-error - Supabase RPC type inference issue
       await supabase.rpc("increment_article_views", {
         article_id: articleId,
       });

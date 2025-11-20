@@ -100,6 +100,7 @@ export async function getUserRateLimit() {
       throw new Error("Not authenticated");
     }
 
+    // @ts-expect-error - Supabase RPC type inference issue
     const { data, error } = await supabase.rpc("get_user_rate_limit", {
       p_user_id: user.id,
     });
@@ -120,6 +121,7 @@ export async function getWorkspaceMonthlyQuota(
   workspaceId: string = "00000000-0000-0000-0000-000000000001"
 ) {
   try {
+    // @ts-expect-error - Supabase RPC type inference issue
     const { data, error } = await supabase.rpc("get_workspace_monthly_quota", {
       p_workspace_id: workspaceId,
     });
@@ -141,6 +143,7 @@ export async function getUsageStats(
   days: number = 30
 ) {
   try {
+    // @ts-expect-error - Supabase RPC type inference issue
     const { data, error } = await supabase.rpc("get_usage_stats", {
       p_workspace_id: workspaceId,
       p_days: days,

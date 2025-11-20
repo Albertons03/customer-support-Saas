@@ -1,3 +1,11 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
+
 export interface Database {
   public: {
     Tables: {
@@ -190,6 +198,51 @@ export interface Database {
           created_by?: string | null;
         };
       };
+    };
+    Functions: {
+      get_user_rate_limit: {
+        Args: {
+          p_user_id: string;
+        };
+        Returns: Array<{
+          requests_count: number;
+          limit_per_hour: number;
+          hour_start: string;
+        }>;
+      };
+      get_workspace_monthly_quota: {
+        Args: {
+          p_workspace_id: string;
+        };
+        Returns: Array<{
+          total_requests: number;
+          monthly_limit: number;
+          month_start: string;
+        }>;
+      };
+      get_usage_stats: {
+        Args: {
+          p_workspace_id: string;
+          p_days: number;
+        };
+        Returns: Array<{
+          date: string;
+          requests: number;
+          tokens: number;
+        }>;
+      };
+      increment_article_views: {
+        Args: {
+          article_id: string;
+        };
+        Returns: void;
+      };
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Enums: {
+      [_ in never]: never;
     };
   };
 }

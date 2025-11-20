@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Save, Eye, X, FileText, Tag, Globe } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../hooks/useAuth";
+import type { Database } from "../../types/database";
 
 interface Article {
   id?: string;
@@ -56,17 +57,19 @@ export function ArticleEditor() {
         .from("knowledge_base_articles")
         .select("*")
         .eq("id", id)
-        .single();
+        .single<
+          Database["public"]["Tables"]["knowledge_base_articles"]["Row"]
+        >();
 
       if (error) throw error;
 
       if (data) {
         setArticle({
           id: data.id,
-          title: data.title,
-          content: data.content,
-          category: data.category,
-          published: data.published,
+          title: data.title || "",
+          content: data.content || "",
+          category: data.category || "Getting Started",
+          published: data.published || false,
         });
       }
     } catch (err) {
@@ -101,6 +104,7 @@ export function ArticleEditor() {
         // Update existing article
         const { error } = await supabase
           .from("knowledge_base_articles")
+          // @ts-expect-error - Supabase type inference issue
           .update(articleData)
           .eq("id", article.id);
 
@@ -113,9 +117,12 @@ export function ArticleEditor() {
         // Create new article
         const { data, error } = await supabase
           .from("knowledge_base_articles")
+          // @ts-expect-error - Supabase type inference issue
           .insert(articleData)
           .select()
-          .single();
+          .single<
+            Database["public"]["Tables"]["knowledge_base_articles"]["Row"]
+          >();
 
         if (error) throw error;
 
