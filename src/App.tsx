@@ -14,6 +14,10 @@ import {
   PublicKB,
   Settings,
   Chat,
+  Attendance,
+  LeaveRequests,
+  StaffReport,
+  Staff,
 } from "./pages";
 import { useAuth } from "./hooks/useAuth";
 
@@ -120,6 +124,38 @@ function App() {
           element={
             <ProtectedRoute>
               <Settings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/hr/attendance"
+          element={
+            <ProtectedRoute>
+              <Attendance />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/hr/leaves"
+          element={
+            <ProtectedRoute>
+              <LeaveRequests />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/hr/staff"
+          element={
+            <ProtectedRoute>
+              <Staff />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/hr/reports"
+          element={
+            <ProtectedRoute>
+              <StaffReport />
             </ProtectedRoute>
           }
         />

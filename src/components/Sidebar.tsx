@@ -10,14 +10,24 @@ import {
   ChevronRight,
   LogOut,
   User,
+  CalendarCheck,
+  Plane,
+  Users,
+  TrendingUp,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
+import { useProfile } from "../hooks/useProfile";
 
 interface MenuItem {
   name: string;
   icon: typeof LayoutDashboard;
   path: string;
   badge?: number;
+}
+
+interface MenuSection {
+  title?: string;
+  items: MenuItem[];
 }
 
 interface SidebarProps {
@@ -29,16 +39,40 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
   const { user, signOut } = useAuth();
+  const { profile, isHR } = useProfile();
 
-  const menuItems: MenuItem[] = [
-    { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-    { name: "Tickets", icon: Ticket, path: "/tickets", badge: 12 },
-    { name: "Chat", icon: MessageSquare, path: "/chat", badge: 3 },
-    { name: "Knowledge Base", icon: BookOpen, path: "/knowledge-base" },
-    { name: "Settings", icon: Settings, path: "/settings" },
+  const sections: MenuSection[] = [
+    {
+      items: [
+        { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
+      ],
+    },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  if (isHR) {
+    sections.push({
+      title: "HR Management",
+      items: [
+        { name: "Attendance", icon: CalendarCheck, path: "/hr/attendance" },
+        { name: "Leave Requests", icon: Plane, path: "/hr/leaves" },
+        { name: "Staff & Riders", icon: Users, path: "/hr/staff" },
+        { name: "Staff Report", icon: TrendingUp, path: "/hr/reports" },
+      ],
+    });
+  }
+
+  sections.push({
+    title: "Support",
+    items: [
+      { name: "Tickets", icon: Ticket, path: "/tickets" },
+      { name: "Chat", icon: MessageSquare, path: "/chat" },
+      { name: "Knowledge Base", icon: BookOpen, path: "/knowledge-base" },
+      { name: "Settings", icon: Settings, path: "/settings" },
+    ],
+  });
+
+  const isActive = (path: string) =>
+    location.pathname === path || location.pathname.startsWith(path + "/");
 
   const handleSignOut = async () => {
     await signOut();
@@ -93,55 +127,54 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
         {/* Navigation Menu */}
         <nav className="flex-1 overflow-y-auto py-4 px-3">
-          <ul className="space-y-1">
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              const active = isActive(item.path);
-
-              return (
-                <li key={item.path}>
-                  <Link
-                    to={item.path}
-                    onClick={onClose}
-                    className={`
-                      flex items-center px-3 py-2.5 rounded-xl transition-all duration-200
-                      ${
-                        active
-                          ? "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white shadow-lg shadow-indigo-500/50 scale-105"
-                          : "text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:from-gray-700 dark:hover:to-gray-600 hover:scale-105"
-                      }
-                      ${isCollapsed ? "justify-center" : ""}
-                    `}
-                  >
-                    <Icon
-                      className={`w-5 h-5 ${
-                        isCollapsed ? "" : "mr-3"
-                      } flex-shrink-0`}
-                    />
-                    {!isCollapsed && (
-                      <>
-                        <span className="flex-1 font-medium">{item.name}</span>
-                        {item.badge && (
-                          <span
-                            className={`
-                              ml-auto px-2 py-0.5 text-xs font-semibold rounded-full
-                              ${
-                                active
-                                  ? "bg-white text-indigo-600"
-                                  : "bg-indigo-100 text-indigo-600"
-                              }
-                            `}
-                          >
-                            {item.badge}
-                          </span>
+          {sections.map((section, sIdx) => (
+            <div key={sIdx} className={sIdx > 0 ? "mt-6" : ""}>
+              {section.title && !isCollapsed && (
+                <p className="px-3 mb-2 text-[10px] uppercase tracking-wider font-semibold text-gray-400 dark:text-gray-500">
+                  {section.title}
+                </p>
+              )}
+              <ul className="space-y-1">
+                {section.items.map((item) => {
+                  const Icon = item.icon;
+                  const active = isActive(item.path);
+                  return (
+                    <li key={item.path}>
+                      <Link
+                        to={item.path}
+                        onClick={onClose}
+                        className={`
+                          flex items-center px-3 py-2.5 rounded-xl transition-all duration-200
+                          ${
+                            active
+                              ? "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white shadow-lg shadow-indigo-500/50 scale-105"
+                              : "text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:from-gray-700 dark:hover:to-gray-600 hover:scale-105"
+                          }
+                          ${isCollapsed ? "justify-center" : ""}
+                        `}
+                      >
+                        <Icon className={`w-5 h-5 ${isCollapsed ? "" : "mr-3"} flex-shrink-0`} />
+                        {!isCollapsed && (
+                          <>
+                            <span className="flex-1 font-medium">{item.name}</span>
+                            {item.badge && (
+                              <span
+                                className={`ml-auto px-2 py-0.5 text-xs font-semibold rounded-full ${
+                                  active ? "bg-white text-indigo-600" : "bg-indigo-100 text-indigo-600"
+                                }`}
+                              >
+                                {item.badge}
+                              </span>
+                            )}
+                          </>
                         )}
-                      </>
-                    )}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
         </nav>
 
         {/* User Profile Section */}
@@ -159,10 +192,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 </div>
                 <div className="ml-3 flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                    {user?.email?.split("@")[0] || "User"}
+                    {profile?.full_name || user?.email?.split("@")[0] || "User"}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                    {user?.email}
+                    {profile?.role
+                      ? profile.role === "hr_manager"
+                        ? "HR Manager"
+                        : profile.role.charAt(0).toUpperCase() + profile.role.slice(1)
+                      : user?.email}
                   </p>
                 </div>
               </div>

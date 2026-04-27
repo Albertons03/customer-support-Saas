@@ -1,4 +1,6 @@
 import { useAuth } from "../hooks/useAuth";
+import { useProfile } from "../hooks/useProfile";
+import { HRDashboard } from "./HRDashboard";
 import { DashboardLayout } from "../components/DashboardLayout";
 import { TicketChart } from "../components/dashboard/TicketChart";
 import { TicketsByCategory } from "../components/dashboard/TicketsByCategory";
@@ -16,6 +18,21 @@ import {
 
 export function Dashboard() {
   const { user } = useAuth();
+  const { isHR, loading: profileLoading } = useProfile();
+
+  if (profileLoading) {
+    return (
+      <DashboardLayout pageTitle="Dashboard">
+        <div className="flex items-center justify-center py-32 text-gray-500 text-sm">
+          Loading…
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (isHR) {
+    return <HRDashboard />;
+  }
 
   // Mock stats data
   const stats = [
