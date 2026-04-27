@@ -8,3 +8,8 @@ export { KnowledgeBase } from "./KnowledgeBase";
 export { PublicKB } from "./PublicKB";
 export { Settings } from "./Settings";
 export { Chat } from "./Chat";
+export { HRDashboard } from "./HRDashboard";
+export { Attendance } from "./Attendance";
+export { LeaveRequests } from "./LeaveRequests";
+export { StaffReport } from "./StaffReport";
+export { Staff } from "./Staff";

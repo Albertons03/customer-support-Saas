@@ -15,7 +15,7 @@ export interface Database {
           email: string;
           full_name: string | null;
           avatar_url: string | null;
-          role: "customer" | "agent" | "admin";
+          role: "customer" | "agent" | "admin" | "hr_manager";
           created_at: string;
           updated_at: string;
         };
